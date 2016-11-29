@@ -1,0 +1,38 @@
+
+#Receiving the data to turn on camera code
+
+from picamera import PiCamera
+from time import sleep
+import network
+import sys
+
+
+camera = PiCamera()
+
+
+def heard(phrase):
+    print("them: " + phrase)
+    if (phrase == "on"):
+        camera.rotation = 180
+        camera.start_preview()
+        camera.start_recording('/home/pi/video.h264')
+        sleep (10)
+        camera.stop_recording()
+        camera.stop_preview()
+    elif (phrase == "off"):
+        print ("cunt")
+
+if (len(sys.argv) >= 2):
+    network.call(sys.argv[1], whenHearCall=heard)
+else:
+    network.wait(whenHearCall=heard)
+
+while network.isConnected():
+    phrase = input()
+    led_state = str(phrase)
+    print("me: " + phrase)
+    network.say(phrase)
+    if (phrase == "on"):
+        print ("cunt")
+    elif (phrase == "off"):
+        p rint ("cunt")
