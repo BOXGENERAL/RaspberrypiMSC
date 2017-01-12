@@ -1,0 +1,46 @@
+try:
+    # for Python2
+    from Tkinter import *   ## notice capitalized T in Tkinter 
+except ImportError:
+    # for Python3
+    from tkinter import *   ## notice lowercase 't' in tkinter herefrom Tkinter 
+import RPi.GPIO as GPIO
+import time
+from time import sleep
+import network
+import sys
+from picamera import PiCamera
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(11, GPIO.IN)
+
+
+
+
+
+ck=0
+number = 2   
+camera = PiCamera()
+while number == 2:
+    i = GPIO.input(11)
+    if (i == 0):
+        print ("No intruders")
+
+        time.sleep(1.5)
+
+
+
+
+    elif (i == 1):
+        print ("Intruder detected")
+        time.sleep(1.5)
+        camera.rotation = 180
+        camera.start_preview()
+        camera.start_recording('/home/pi/video.h264')
+        sleep (10)
+        camera.stop_recording()
+        camera.stop_preview()
+
+
+
