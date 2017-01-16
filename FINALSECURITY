@@ -6,12 +6,13 @@ from time import sleep
 import network
 import sys
 
-
+#Activates the Camera code.
 camera = PiCamera()
 
-
+#Other raspberry pi control
 def heard(phrase):
     print("them: " + phrase)
+    #When the Motion sensor detects motion the motion sensor it turns on the camera from the other pi
     if (phrase == "on"):
         camera.rotation = 180
         camera.start_preview()
@@ -19,20 +20,28 @@ def heard(phrase):
         sleep (10)
         camera.stop_recording()
         camera.stop_preview()
+    #Turns off the camera from the other raspberry pi.
     elif (phrase == "off"):
-        print ("cunt")
+        camera.stop_recording()
+        camera.stop_preview()
 
 if (len(sys.argv) >= 2):
     network.call(sys.argv[1], whenHearCall=heard)
 else:
     network.wait(whenHearCall=heard)
 
+#User control on the Camera 
 while network.isConnected():
     phrase = input()
     led_state = str(phrase)
     print("me: " + phrase)
     network.say(phrase)
+    #Turns on the camera from the user computer
     if (phrase == "on"):
-        print ("cunt")
+        camera.rotation = 180
+        camera.start_preview()
+        camera.start_recording('/home/pi/video.h264')
+    #Turns off the camera from the user computer
     elif (phrase == "off"):
-        p rint ("cunt")
+        camera.stop_recording()
+        camera.stop_preview()
